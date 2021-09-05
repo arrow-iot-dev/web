@@ -54,6 +54,7 @@ const styles = {
 		fontSize: 24
   },
 	listItem: {
+		display: 'flex',
 		flexDirection: 'row',
 		paddingTop: 5,
 		paddingBottom: 5,

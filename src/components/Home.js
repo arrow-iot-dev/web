@@ -20,6 +20,8 @@ export default Home
 
 const styles = {
 	container: {
+		display: 'flex',
+		flexDirection: 'column',
 		flex: 1,
 		padding: 15,
 	},
@@ -27,6 +29,8 @@ const styles = {
 		fontSize: 24
   },
 	distanceWrap: {
+		display: 'flex',
+		flexDirection: 'column',
 		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
