@@ -15,9 +15,19 @@ const FlatList = ({ data, keyExtractor, renderItem}) => {
 	)
 }
 
-const Logs = ({ data = [] }) => {
+const Logs = ({ data = [], clearLogs }) => {
+	const onClear = () => {
+		const answer = window.confirm('Are you sure to clear all logs')
+		if (answer) {
+			clearLogs()
+		}
+	}
+
 	return (
 		<div style={styles.container}>
+			<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+				<button onClick={onClear}>clear</button>
+			</div>
 			<div style={styles.listItem}>
 				<div style={{...styles.th, ...styles.number}}>No.</div>
 				<div style={{...styles.th, ...styles.distance}}>Distance (cm.)</div>
@@ -33,7 +43,7 @@ const Logs = ({ data = [] }) => {
 					return (
 						<div style={styles.listItem}>
 							<div style={styles.number}>#{index}</div>
-							<div style={styles.distance}>{item.distance}</div>
+							<div style={styles.distance}>{(item.distance || 0).toFixed(2)}</div>
 							<div style={styles.time}>{timer}</div>
 						</div>
 					)

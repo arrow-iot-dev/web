@@ -13,13 +13,48 @@ const useBle = () => {
   const [time, setTime] = useState(0)
   const [isReset, setIsReset] = useState(false)
   const [logs, setLogs] = useState([])
+  const [isStarting, setIsStarting] = useState(false)
+
+  useEffect(() => {
+    const savedLogs = localStorage.getItem('logs')
+    const oldLogs = savedLogs ? JSON.parse(savedLogs) : []
+    setLogs(oldLogs)
+  }, [])
+
+  const setToggleTimer = useCallback(() => {
+    setIsStarting(starting => {
+      if (starting) {
+        setLogs((prevLogs) => {
+          const newLogs = [...prevLogs, {
+            distance: maxDistance,
+            time,
+          }]
+          localStorage.setItem('logs', JSON.stringify(newLogs))
+          return newLogs
+        })
+        setIsReset(false)
+        setMaxDistance(0)
+        setTime(0)
+      } else {
+        setIsReset(true)
+      }
+      return !starting
+    })
+  }, [maxDistance, time])
+
+  const clearLogs = useCallback(() => {
+    setLogs([])
+    localStorage.removeItem('logs')
+  }, [])
 
   const reset = useCallback(() => {
     setLogs((prevLogs) => {
-      return [...prevLogs, {
+      const newLogs = [...prevLogs, {
         distance: maxDistance,
         time,
       }]
+      localStorage.setItem('logs', JSON.stringify(newLogs))
+      return newLogs
     })
     setIsReset(false)
     setIsReset(true)
@@ -91,7 +126,7 @@ const useBle = () => {
     })
   }, [distance])
 
-  return { distance, time, logs, isConnected, scanAndConnect, reset }
+  return { distance, time, logs, isConnected, scanAndConnect, reset, clearLogs, setToggleTimer, isStarting }
 }
 
 export default useBle

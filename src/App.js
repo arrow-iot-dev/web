@@ -23,18 +23,18 @@ import useBle from './hooks/useBle'
 // ]
 
 function App() {
-  const { distance, time, logs: data, isConnected, scanAndConnect, reset } = useBle()
+  const { distance, time, logs: data, isConnected, scanAndConnect, clearLogs, isStarting, setToggleTimer } = useBle()
   const [tabKey, setTabKey] = useState('home') // home, logs
     const tabs = useMemo(() => ({
       home: {
         component: Home,
-        props: { distance, time },
+        props: { distance, time, isStarting, setToggleTimer },
       },
       logs: {
         component: Logs,
-        props: { data }
+        props: { data, clearLogs }
       }
-    }), [data, distance, time])
+    }), [data, distance, time, clearLogs, setToggleTimer, isStarting])
     const Comp = tabs[tabKey].component
     const props = tabs[tabKey].props
 
@@ -42,7 +42,7 @@ function App() {
       <div style={styles.container}>
         <div style={styles.status}>
           <div style={styles.scanningdiv}>{isConnected ? 'Connected' : 'Disconnected'}</div>
-          <button style={styles.button} onClick={reset}>Reset</button>
+          {/* <button style={styles.button} onClick={reset}>Reset</button> */}
           <button style={styles.button} onClick={scanAndConnect}>Scan and Connect</button>
         </div>
         <div style={styles.content}>

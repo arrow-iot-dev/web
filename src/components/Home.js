@@ -1,16 +1,25 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
-const Home = ({ distance = 0, time = 0 }) => {
-	const s = (time % 60).toString().padStart(2, '0')
-	const m = Math.floor(time / 60).toString().padStart(2, '0')
-	const timer = `${m}:${s}`
+const Home = ({ distance = 0, time = 0, isStarting, setToggleTimer }) => {
+	const timer = useMemo(() => {
+		const s = (time % 60).toString().padStart(2, '0')
+		const m = Math.floor(time / 60).toString().padStart(2, '0')
+		return `${m}:${s}`
+	}, [time])
+
 	return (
 		<div style={styles.container}>
 			<div style={styles.distanceWrap}>
 				<div style={styles.label}>Distance</div>
-				<div style={styles.distance}>{distance}</div>
+				<div style={styles.distance}>{(distance || 0).toFixed(2)}</div>
 				<div style={styles.unit}>centimeters</div>
 				<div style={styles.timer}>Timer: {timer}s</div>
+				<button
+					style={{ fontSize: 30, backgroundColor: isStarting ? '#DC143C' : '#7FFF00' }}
+					onClick={setToggleTimer}
+				>
+					{isStarting ? 'Stop' : 'Start'}
+				</button>
 			</div>
 		</div>
 	)
@@ -47,5 +56,6 @@ const styles = {
 	timer: {
 		marginTop: 30,
 		fontSize: 35,
+		marginBottom: 30,
 	}
 };
