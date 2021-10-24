@@ -40,7 +40,7 @@ const useBle = () => {
       }
       return !starting
     })
-  }, [maxDistance, time])
+  }, [distance, time])
 
   const clearLogs = useCallback(() => {
     setLogs([])
