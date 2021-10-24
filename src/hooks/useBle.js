@@ -26,7 +26,7 @@ const useBle = () => {
       if (starting) {
         setLogs((prevLogs) => {
           const newLogs = [...prevLogs, {
-            distance: maxDistance,
+            distance,
             time,
           }]
           localStorage.setItem('logs', JSON.stringify(newLogs))
