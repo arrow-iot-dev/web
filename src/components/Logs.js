@@ -30,7 +30,7 @@ const Logs = ({ data = [], clearLogs }) => {
 			</div>
 			<div style={styles.listItem}>
 				<div style={{...styles.th, ...styles.number}}>No.</div>
-				<div style={{...styles.th, ...styles.distance}}>Distance (cm.)</div>
+				<div style={{...styles.th, ...styles.distance}}>Distance (in.)</div>
 				<div style={{...styles.th, ...styles.time}}>Time (mm:ss)</div>
 			</div>
 			<FlatList

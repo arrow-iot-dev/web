@@ -12,7 +12,7 @@ const Home = ({ distance = 0, time = 0, isStarting, setToggleTimer }) => {
 			<div style={styles.distanceWrap}>
 				<div style={styles.label}>Distance</div>
 				<div style={styles.distance}>{(distance || 0).toFixed(2)}</div>
-				<div style={styles.unit}>centimeters</div>
+				<div style={styles.unit}>Inches</div>
 				<div style={styles.timer}>Timer: {timer}s</div>
 				<button
 					style={{ fontSize: 30, backgroundColor: isStarting ? '#DC143C' : '#7FFF00' }}

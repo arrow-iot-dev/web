@@ -4,6 +4,10 @@ const serviceUUID = '52cf0b2c-28f2-4328-aaac-6badc36777d4'
 const characteristicUUID = '051f540c-9a37-4284-9f98-2073e9f5bdfe'
 const bleName = 'Arrow_ESP32'
 
+const cmToInch = (cm) => {
+  return cm / 2.54
+}
+
 const useBle = () => {
   const interval = useRef(null)
   // const [isScanning, setIsScanning] = useState(true)
@@ -97,7 +101,8 @@ const useBle = () => {
         const decoder = new TextDecoder('utf-8')
         const [distance, isReset] = decoder.decode(value).split(',')
         console.log({ distance, isReset })
-        setDistance(+distance)
+        const distanceInch = cmToInch(+distance)
+        setDistance(distanceInch)
         if (isReset === 'true') {
           alert('reset')
           reset()
