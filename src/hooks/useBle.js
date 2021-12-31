@@ -4,6 +4,9 @@ const serviceUUID = '52cf0b2c-28f2-4328-aaac-6badc36777d4'
 const characteristicUUID = '051f540c-9a37-4284-9f98-2073e9f5bdfe'
 const bleName = 'Arrow_ESP32'
 
+const maxThreshold =  70 / 2.54 // 70 cm
+const minThreshold =  50 / 2.54 // 50 cm
+
 const cmToInch = (cm) => {
   return cm / 2.54
 }
@@ -30,7 +33,7 @@ const useBle = () => {
       if (starting) {
         setLogs((prevLogs) => {
           const newLogs = [...prevLogs, {
-            distance,
+            distance: maxDistance,
             time,
           }]
           localStorage.setItem('logs', JSON.stringify(newLogs))
@@ -44,7 +47,7 @@ const useBle = () => {
       }
       return !starting
     })
-  }, [distance, time])
+  }, [maxDistance, time])
 
   const clearLogs = useCallback(() => {
     setLogs([])
@@ -124,8 +127,10 @@ const useBle = () => {
 
   useEffect(() => {
     setMaxDistance((prevMax) => {
-      if (distance > prevMax) {
-        return distance
+      if (distance >= minThreshold && distance <= maxThreshold) {
+        if (distance > prevMax) {
+          return distance
+        }
       }
       return prevMax
     })
