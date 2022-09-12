@@ -115,14 +115,16 @@ const useBle = () => {
         */
         const [state, distance, time] = decoder.decode(value).split(',')
         const distanceInch = +distance
+        const timeN = +time
+        const stateN = +state
         setDistance(distanceInch)
-        setTime(+time)
-        setState(+state)
-        if (+state === 2) {
+        setTime(timeN)
+        setState(stateN)
+        if (stateN === 2) {
           setLogs((prevLogs) => {
             const newLogs = [...prevLogs, {
               distance: distanceInch,
-              time,
+              time: timeN,
             }]
             localStorage.setItem('logs', JSON.stringify(newLogs))
             return newLogs
