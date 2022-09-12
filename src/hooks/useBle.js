@@ -188,7 +188,9 @@ const useBle = () => {
     .then(characteristic => {
       if (alarmTime >= 0) {
         const aTime = alarmTime.toString();
-        characteristic.writeValue(aTime);
+        const encoder = new TextEncoder('utf-8')
+        // characteristic.writeValue(aTime);
+        characteristic.writeValue(encoder.encode(aTime));
         alert('Saved !!!')
       } else {
         alert('Time is not valid !!!')
