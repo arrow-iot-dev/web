@@ -186,7 +186,7 @@ const useBle = () => {
       return service.getCharacteristic(characteristicUUID2)
     })
     .then(characteristic => {
-      if (alarmTime > 0) {
+      if (alarmTime >= 0) {
         const aTime = Uint8Array.of(alarmTime);
         characteristic.writeValue(aTime);
         alert('Saved !!!')
