@@ -116,9 +116,9 @@ const useBle = () => {
         const [state, distance, time] = decoder.decode(value).split(',')
         const distanceInch = +distance
         setDistance(distanceInch)
-        setTime(time)
-        setState(state)
-        if (state === 2) {
+        setTime(+time)
+        setState(+state)
+        if (+state === 2) {
           setLogs((prevLogs) => {
             const newLogs = [...prevLogs, {
               distance: distanceInch,
