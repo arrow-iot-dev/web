@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import './App.css';
 import Home from './components/Home'
 import Logs from './components/Logs'
+import Setting from './components/Setting'
 import useBle from './hooks/useBle'
 
 // const isScanning = false
@@ -24,8 +25,8 @@ import useBle from './hooks/useBle'
 
 function App() {
   // const { distance, time, logs: data, isConnected, scanAndConnect, clearLogs, isStarting, setToggleTimer } = useBle()
-  const { distance, time, logs: data, isConnected, scanAndConnect, clearLogs, state } = useBle
-  const [tabKey, setTabKey] = useState('home') // home, logs
+  const { distance, time, logs: data, isConnected, scanAndConnect, clearLogs, state, alarmTime, setAlarmTime } = useBle()
+  const [tabKey, setTabKey] = useState('home') // home, logs, setting
     const tabs = useMemo(() => ({
       home: {
         component: Home,
@@ -34,8 +35,12 @@ function App() {
       logs: {
         component: Logs,
         props: { data, clearLogs }
+      },
+      setting: {
+        component: Setting,
+        props: { alarmTime, setAlarmTime }
       }
-    }), [data, distance, time, clearLogs, state])
+    }), [data, distance, time, clearLogs, state, alarmTime, setAlarmTime])
     const Comp = tabs[tabKey].component
     const props = tabs[tabKey].props
 
@@ -55,6 +60,9 @@ function App() {
           </div>
           <div style={styles.tab} onClick={() => setTabKey('logs')}>
             <div style={tabKey === 'logs' ? styles.activeLabel : styles.inactiveLabel}>Logs</div>
+          </div>
+          <div style={styles.tab} onClick={() => setTabKey('setting')}>
+            <div style={tabKey === 'setting' ? styles.activeLabel : styles.inactiveLabel}>Setting</div>
           </div>
         </div>
       </div>

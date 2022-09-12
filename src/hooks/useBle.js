@@ -22,6 +22,7 @@ const useBle = () => {
   const [logs, setLogs] = useState([])
   // const [isStarting, setIsStarting] = useState(false)
   const [state, setState] = useState(0)
+  const [alarmTime, setAlarmTime] = useState(0)
 
   useEffect(() => {
     const savedLogs = localStorage.getItem('logs')
@@ -157,7 +158,7 @@ const useBle = () => {
   // }, [distance])
 
   // return { distance, time, logs, isConnected, scanAndConnect, reset, clearLogs, setToggleTimer, isStarting, state }
-  return { distance, time, logs, isConnected, scanAndConnect, clearLogs, state }
+  return { distance, time, logs, isConnected, scanAndConnect, clearLogs, state, alarmTime, setAlarmTime }
 }
 
 export default useBle
