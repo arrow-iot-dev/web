@@ -3,9 +3,10 @@ import React, { useMemo } from 'react'
 const Home = ({ distance = 0, time = 0, state = 0 }) => {
 	const timer = useMemo(() => {
 		const sTime = time / 1000
-		const s = (sTime % 60).toString().padStart(2, '0')
-		const m = Math.floor(sTime / 60).toString().padStart(2, '0')
-		return `${m}:${s}`
+		// const s = (sTime % 60).toString().padStart(2, '0')
+		// const m = Math.floor(sTime / 60).toString().padStart(2, '0')
+		// return `${m}:${s}`
+		return `${sTime}`
 	}, [time])
 
 	return (

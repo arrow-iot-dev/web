@@ -31,16 +31,17 @@ const Logs = ({ data = [], clearLogs }) => {
 			<div style={styles.listItem}>
 				<div style={{...styles.th, ...styles.number}}>No.</div>
 				<div style={{...styles.th, ...styles.distance}}>Distance (in.)</div>
-				<div style={{...styles.th, ...styles.time}}>Time (mm:ss)</div>
+				<div style={{...styles.th, ...styles.time}}>Time (sec.)</div>
 			</div>
 			<FlatList
 				data={data}
 				keyExtractor={(item, index) => index.toString()}
 				renderItem={({ item, index }) => {
 					const sTime = item.time / 1000
-					const s = (sTime % 60).toString().padStart(2, '0')
-					const m = Math.floor(sTime / 60).toString().padStart(2, '0')
-					const timer = `${m}:${s}`
+					// const s = (sTime % 60).toString().padStart(2, '0')
+					// const m = Math.floor(sTime / 60).toString().padStart(2, '0')
+					// const timer = `${m}:${s}`
+					const timer = `${sTime}`
 					return (
 						<div style={styles.listItem}>
 							<div style={styles.number}>#{index}</div>
@@ -60,6 +61,7 @@ const styles = {
 	container: {
 		flex: 1,
 		padding: 15,
+    paddingBottom: 100,
 	},
   title: {
 		fontSize: 24

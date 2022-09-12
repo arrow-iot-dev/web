@@ -43,6 +43,7 @@ const styles = {
     padding: 10,
     margin: 20,
     textAlign: 'center',
+    width: 100,
   },
 	label: {
 		fontSize: 30,

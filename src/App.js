@@ -76,7 +76,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     flex: 1,
-    height: '100vh',
+    minHeight: '100vh',
   },
   content: {
     display: 'flex',
@@ -88,7 +88,7 @@ const styles = {
   tabs: {
     display: 'flex',
     flexDirection: 'row',
-    position: 'absolute',
+    position: 'fixed',
     letf: 0,
     right: 0,
     width: '100%',
