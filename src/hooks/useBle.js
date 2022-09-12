@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react'
 
 const serviceUUID = '52cf0b2c-28f2-4328-aaac-6badc36777d4'
 const characteristicUUID = '051f540c-9a37-4284-9f98-2073e9f5bdfe'
+const characteristicUUID2 = 'ec14304a-1796-4e20-b170-7f24492a5aca'
 const bleName = 'Arrow_ESP32'
 
 // const maxThreshold =  70 / 2.54 // 70 cm
@@ -157,8 +158,45 @@ const useBle = () => {
   //   })
   // }, [distance])
 
+  const onSaveAlarmTime = () => {
+    navigator.bluetooth.requestDevice({
+      filters: [{
+        name: bleName
+      }],
+      optionalServices: [serviceUUID]
+    })
+    .then(device => {
+      console.log({ device })
+      device.addEventListener('gattserverdisconnected', (event) => {
+        const device = event.target;
+        setIsConnected(false)
+        console.log(`Device ${device.name} is disconnected.`)
+      })
+      return device.gatt.connect();
+    })
+    .then((server) => {
+      console.log({ server })
+      setIsConnected(server.connected)
+      return server.getPrimaryService(serviceUUID)
+    })
+    .then((service) => {
+      console.log({ service })
+      return service.getCharacteristic(characteristicUUID2)
+    })
+    .then(characteristic => {
+      if (alarmTime > 0) {
+        const aTime = Uint8Array.of(alarmTime);
+        characteristic.writeValue(aTime);
+        alert('Saved !!!')
+      } else {
+        alert('Time is not valid !!!')
+      }
+    })
+    .catch(error => { console.error(error); });
+  }
+
   // return { distance, time, logs, isConnected, scanAndConnect, reset, clearLogs, setToggleTimer, isStarting, state }
-  return { distance, time, logs, isConnected, scanAndConnect, clearLogs, state, alarmTime, setAlarmTime }
+  return { distance, time, logs, isConnected, scanAndConnect, clearLogs, state, alarmTime, setAlarmTime, onSaveAlarmTime }
 }
 
 export default useBle

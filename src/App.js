@@ -25,7 +25,7 @@ import useBle from './hooks/useBle'
 
 function App() {
   // const { distance, time, logs: data, isConnected, scanAndConnect, clearLogs, isStarting, setToggleTimer } = useBle()
-  const { distance, time, logs: data, isConnected, scanAndConnect, clearLogs, state, alarmTime, setAlarmTime } = useBle()
+  const { distance, time, logs: data, isConnected, scanAndConnect, clearLogs, state, alarmTime, setAlarmTime, onSaveAlarmTime } = useBle()
   const [tabKey, setTabKey] = useState('home') // home, logs, setting
     const tabs = useMemo(() => ({
       home: {
@@ -38,9 +38,9 @@ function App() {
       },
       setting: {
         component: Setting,
-        props: { alarmTime, setAlarmTime }
+        props: { alarmTime, setAlarmTime, onSaveAlarmTime }
       }
-    }), [data, distance, time, clearLogs, state, alarmTime, setAlarmTime])
+    }), [data, distance, time, clearLogs, state, alarmTime, setAlarmTime, onSaveAlarmTime])
     const Comp = tabs[tabKey].component
     const props = tabs[tabKey].props
 

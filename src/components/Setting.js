@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 
-const Setting = ({ alarmTime, setAlarmTime }) => {
+const Setting = ({ alarmTime, setAlarmTime, onSaveAlarmTime }) => {
   const time = useMemo(() => {
     return alarmTime / 1000
   }, [alarmTime])
@@ -13,6 +13,7 @@ const Setting = ({ alarmTime, setAlarmTime }) => {
           const newTime = +e.target.value * 1000
           setAlarmTime(newTime)
         }} />
+        <button style={styles.button} onClick={onSaveAlarmTime}>Save</button>
 			</div>
 		</div>
 	)
@@ -46,6 +47,9 @@ const styles = {
 	label: {
 		fontSize: 30,
 	},
+  button: {
+    fontSize: 20,
+  },
 	distance: {
 		fontSize: 100
 	},
