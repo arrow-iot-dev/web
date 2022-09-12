@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react'
 
 const serviceUUID = '52cf0b2c-28f2-4328-aaac-6badc36777d4'
 const characteristicUUID = '051f540c-9a37-4284-9f98-2073e9f5bdfe'
-const characteristicUUID2 = 'ec14304a-1796-4e20-b170-7f24492a5aca'
+// const characteristicUUID2 = 'ec14304a-1796-4e20-b170-7f24492a5aca'
 const bleName = 'Arrow_ESP32'
 
 // const maxThreshold =  70 / 2.54 // 70 cm
@@ -183,7 +183,7 @@ const useBle = () => {
     })
     .then((service) => {
       console.log({ service })
-      return service.getCharacteristic(characteristicUUID2)
+      return service.getCharacteristic(characteristicUUID)
     })
     .then(characteristic => {
       if (alarmTime >= 0) {
