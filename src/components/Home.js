@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react'
 
-const Home = ({ distance = 0, time = 0, isStarting, setToggleTimer }) => {
+const Home = ({ distance = 0, time = 0, state = 0 }) => {
 	const timer = useMemo(() => {
-		const s = (time % 60).toString().padStart(2, '0')
-		const m = Math.floor(time / 60).toString().padStart(2, '0')
+		const sTime = time / 1000
+		const s = (sTime % 60).toString().padStart(2, '0')
+		const m = Math.floor(sTime / 60).toString().padStart(2, '0')
 		return `${m}:${s}`
 	}, [time])
 
@@ -13,13 +14,11 @@ const Home = ({ distance = 0, time = 0, isStarting, setToggleTimer }) => {
 				<div style={styles.label}>Distance</div>
 				<div style={styles.distance}>{(distance || 0).toFixed(2)}</div>
 				<div style={styles.unit}>Inches</div>
-				<div style={styles.timer}>Timer: {timer}s</div>
-				<button
-					style={{ fontSize: 30, backgroundColor: isStarting ? '#DC143C' : '#7FFF00' }}
-					onClick={setToggleTimer}
-				>
-					{isStarting ? 'Stop' : 'Start'}
-				</button>
+				{
+					state > 0 && (
+						<div style={styles.timer}>Timer: {timer}s</div>
+					)
+				}
 			</div>
 		</div>
 	)
