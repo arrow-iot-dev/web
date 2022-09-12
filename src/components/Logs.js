@@ -37,8 +37,9 @@ const Logs = ({ data = [], clearLogs }) => {
 				data={data}
 				keyExtractor={(item, index) => index.toString()}
 				renderItem={({ item, index }) => {
-					const s = (item.time % 60).toString().padStart(2, '0')
-					const m = Math.floor(item.time / 60).toString().padStart(2, '0')
+					const sTime = item.time / 1000
+					const s = (sTime % 60).toString().padStart(2, '0')
+					const m = Math.floor(sTime / 60).toString().padStart(2, '0')
 					const timer = `${m}:${s}`
 					return (
 						<div style={styles.listItem}>
