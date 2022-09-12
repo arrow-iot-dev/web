@@ -187,7 +187,7 @@ const useBle = () => {
     })
     .then(characteristic => {
       if (alarmTime >= 0) {
-        const aTime = Uint8Array.of(alarmTime);
+        const aTime = alarmTime.toString();
         characteristic.writeValue(aTime);
         alert('Saved !!!')
       } else {
