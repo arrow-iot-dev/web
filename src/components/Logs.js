@@ -22,11 +22,19 @@ const Logs = ({ data = [], clearLogs }) => {
 			clearLogs()
 		}
 	}
+	const onExport = () => {
+		const columns = 'No.,Distance(in.),Time(sec.)'
+		const text = [columns, ...data.map((log, index) => `${index + 1},${(log.distance || 0).toFixed(2)},${log.time / 1000}`)].join('\n')
+		const content = `data:text/csv;charset=utf-8,${text}`
+		const encodedUri = encodeURI(content)
+		window.open(encodedUri)
+	}
 
 	return (
 		<div style={styles.container}>
-			<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-				<button onClick={onClear}>clear</button>
+			<div style={{ display: 'flex', justifyContent: 'space-between' }}>
+				<button onClick={onClear}>Clear</button>
+				<button onClick={onExport}>Export</button>
 			</div>
 			<div style={styles.listItem}>
 				<div style={{...styles.th, ...styles.number}}>No.</div>
@@ -44,7 +52,7 @@ const Logs = ({ data = [], clearLogs }) => {
 					const timer = `${sTime}`
 					return (
 						<div style={styles.listItem}>
-							<div style={styles.number}>#{index}</div>
+							<div style={styles.number}>#{index + 1}</div>
 							<div style={styles.distance}>{(item.distance || 0).toFixed(2)}</div>
 							<div style={styles.time}>{timer}</div>
 						</div>

@@ -12,6 +12,17 @@ const bleName = 'Arrow_ESP32'
 //   return cm / 2.54
 // }
 
+// const mockLogs = [{
+//   distance: 100.0,
+//   time: 4000
+// }, {
+//   distance: 100.0,
+//   time: 4000
+// }, {
+//   distance: 120.0,
+//   time: 4100
+// }]
+
 const useBle = () => {
   // const interval = useRef(null)
   // const [isScanning, setIsScanning] = useState(true)
@@ -29,6 +40,7 @@ const useBle = () => {
     const savedLogs = localStorage.getItem('logs')
     const oldLogs = savedLogs ? JSON.parse(savedLogs) : []
     setLogs(oldLogs)
+    // setLogs(mockLogs)
   }, [])
 
   // const setToggleTimer = useCallback(() => {
