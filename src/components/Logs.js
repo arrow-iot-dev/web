@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState } from 'react'
+import dayjs from 'dayjs'
 
 const FlatList = ({ data, keyExtractor, renderItem}) => {
 	return (
@@ -15,7 +16,12 @@ const FlatList = ({ data, keyExtractor, renderItem}) => {
 	)
 }
 
-const Logs = ({ data = [], clearLogs }) => {
+const Logs = ({ data = [], clearLogs, names, setNames, selectedName, setSelectedName }) => {
+	const [value, setValue] = useState('')
+	const [date, setDate] = useState(dayjs().format('YYYY-MM-DD'))
+
+	const list = data.filter((item) => item.name === selectedName && dayjs(item.dateTime).isSame(date, 'date'))
+
 	const onClear = () => {
 		const answer = window.confirm('Are you sure to clear all logs')
 		if (answer) {
@@ -23,8 +29,8 @@ const Logs = ({ data = [], clearLogs }) => {
 		}
 	}
 	const onExport = () => {
-		const columns = 'No.,Distance(in.),Time(sec.)'
-		const text = [columns, ...data.map((log, index) => `${index + 1},${(log.distance || 0).toFixed(2)},${log.time / 1000}`)].join('\n')
+		const columns = 'No.,Distance(in.),Time(sec.),Name,Date Time'
+		const text = [columns, ...list.map((log, index) => `${index + 1},${(log.distance || 0).toFixed(2)},${log.time / 1000},${log.name},${log.dateTime}`)].join('\n')
 		const content = `data:text/csv;charset=utf-8,${text}`
 		const encodedUri = encodeURI(content)
 		window.open(encodedUri)
@@ -32,6 +38,35 @@ const Logs = ({ data = [], clearLogs }) => {
 
 	return (
 		<div style={styles.container}>
+			<div style={{ marginBottom: 10}}>
+				<input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+			</div>
+			<div style={{ marginBottom: 10}}>
+				<input value={value} onChange={(e) => setValue(e.target.value)} />
+				<button onClick={() => {
+					setNames(names => {
+						const newValue = [...names, value]
+						localStorage.setItem('names', JSON.stringify(newValue))
+						return newValue
+					})
+					setValue('')
+				}}>+ Add</button>
+			</div>
+			<div style={styles.nameRow}>
+				{names.map((name) =>
+					<div style={name === selectedName ? styles.activeTag : styles.tag}>
+						<span onClick={() => setSelectedName(name)}>{name}</span>
+						<span style={{ cursor: 'pointer'}} onClick={() => {
+							setNames(names => {
+								const newValue = names.filter(n => n !== name)
+								localStorage.setItem('names', JSON.stringify(newValue))
+								return newValue
+							})
+						}}>X</span>
+					</div>
+				)}
+			</div>
+			<hr />
 			<div style={{ display: 'flex', justifyContent: 'space-between' }}>
 				<button onClick={onClear}>Clear</button>
 				<button onClick={onExport}>Export</button>
@@ -42,7 +77,7 @@ const Logs = ({ data = [], clearLogs }) => {
 				<div style={{...styles.th, ...styles.time}}>Time (sec.)</div>
 			</div>
 			<FlatList
-				data={data}
+				data={list}
 				keyExtractor={(item, index) => index.toString()}
 				renderItem={({ item, index }) => {
 					const sTime = item.time / 1000
@@ -97,4 +132,24 @@ const styles = {
 		divAlign: 'right',
 		fontSize: 20,
 	},
+	tag: {
+		border: '1px solid #d0d0d0',
+		backgroundColor: '#fff',
+		padding: 5,
+		width: 'fit-content',
+		display: 'flex',
+		gap: 3,
+	},
+	activeTag: {
+		border: '3px solid lime',
+		backgroundColor: '#d0d0d0',
+		padding: 5,
+		width: 'fit-content',
+		display: 'flex',
+		gap: 3,
+	},
+	nameRow: {
+		display: 'flex',
+		gap: 5,
+	}
 }

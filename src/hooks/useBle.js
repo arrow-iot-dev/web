@@ -14,13 +14,19 @@ const bleName = 'Arrow_ESP32'
 
 // const mockLogs = [{
 //   distance: 100.0,
-//   time: 4000
+//   time: 4000,
+//   dateTime: new Date(),
+//   name: 'Ping'
 // }, {
 //   distance: 100.0,
-//   time: 4000
+//   time: 4000,
+//   dateTime: new Date(),
+//   name: 'Joe',
 // }, {
 //   distance: 120.0,
-//   time: 4100
+//   time: 4100,
+//   dateTime: new Date(),
+//   name: 'Jame',
 // }]
 
 const useBle = () => {
@@ -35,12 +41,19 @@ const useBle = () => {
   // const [isStarting, setIsStarting] = useState(false)
   const [state, setState] = useState(0)
   const [alarmTime, setAlarmTime] = useState(0)
+  const [names, setNames] = useState([])
+  const [selectedName, setSelectedName] = useState()
 
   useEffect(() => {
     const savedLogs = localStorage.getItem('logs')
     const oldLogs = savedLogs ? JSON.parse(savedLogs) : []
     setLogs(oldLogs)
     // setLogs(mockLogs)
+
+    const savedNames = localStorage.getItem('names')
+    const oldNames = savedNames ? JSON.parse(savedNames) : ['NoName']
+    setNames(oldNames)
+    setSelectedName(oldNames?.[0])
   }, [])
 
   // const setToggleTimer = useCallback(() => {
@@ -137,6 +150,8 @@ const useBle = () => {
             const newLogs = [...prevLogs, {
               distance: distanceInch,
               time: timeN,
+              dateTime: new Date(),
+              name: selectedName,
             }]
             localStorage.setItem('logs', JSON.stringify(newLogs))
             return newLogs
@@ -150,7 +165,7 @@ const useBle = () => {
       console.log('Notifications have been started.');
     })
     .catch(error => { console.error(error); });
-  }, [])
+  }, [selectedName])
 
   // useEffect(() => {
   //   if (isReset) {
@@ -212,7 +227,7 @@ const useBle = () => {
   }
 
   // return { distance, time, logs, isConnected, scanAndConnect, reset, clearLogs, setToggleTimer, isStarting, state }
-  return { distance, time, logs, isConnected, scanAndConnect, clearLogs, state, alarmTime, setAlarmTime, onSaveAlarmTime }
+  return { distance, time, logs, isConnected, scanAndConnect, clearLogs, state, alarmTime, setAlarmTime, onSaveAlarmTime, names, selectedName, setNames, setSelectedName }
 }
 
 export default useBle

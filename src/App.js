@@ -25,7 +25,7 @@ import useBle from './hooks/useBle'
 
 function App() {
   // const { distance, time, logs: data, isConnected, scanAndConnect, clearLogs, isStarting, setToggleTimer } = useBle()
-  const { distance, time, logs: data, isConnected, scanAndConnect, clearLogs, state, alarmTime, setAlarmTime, onSaveAlarmTime } = useBle()
+  const { distance, time, logs: data, isConnected, scanAndConnect, clearLogs, state, alarmTime, setAlarmTime, onSaveAlarmTime, names, selectedName, setNames, setSelectedName } = useBle()
   const [tabKey, setTabKey] = useState('home') // home, logs, setting
     const tabs = useMemo(() => ({
       home: {
@@ -34,13 +34,13 @@ function App() {
       },
       logs: {
         component: Logs,
-        props: { data, clearLogs }
+        props: { data, clearLogs, names, setNames, selectedName, setSelectedName }
       },
       setting: {
         component: Setting,
         props: { alarmTime, setAlarmTime, onSaveAlarmTime }
       }
-    }), [data, distance, time, clearLogs, state, alarmTime, setAlarmTime, onSaveAlarmTime])
+    }), [data, distance, time, clearLogs, state, alarmTime, setAlarmTime, onSaveAlarmTime, names, setNames, selectedName, setSelectedName])
     const Comp = tabs[tabKey].component
     const props = tabs[tabKey].props
 
@@ -81,7 +81,7 @@ const styles = {
   content: {
     display: 'flex',
     flex: 1,
-    paddingTop: 50,
+    // paddingTop: 50,
     backgroundColor: '#F5F5DC',
     height: '100%',
   },
