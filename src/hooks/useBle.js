@@ -167,6 +167,12 @@ const useBle = () => {
     .catch(error => { console.error(error); });
   }, [selectedName])
 
+  useEffect(() => {
+    if (selectedName) {
+      scanAndConnect()
+    }
+  }, [selectedName, scanAndConnect])
+
   // useEffect(() => {
   //   if (isReset) {
   //     interval.current =  setInterval(() => {
