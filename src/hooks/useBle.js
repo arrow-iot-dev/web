@@ -182,12 +182,11 @@ const useBle = () => {
     setBleDevice(null)
   }, [bleDevice])
 
-  // useEffect(() => {
-  //   if (selectedName) {
-  //     onDisconnect()
-  //     scanAndConnect()
-  //   }
-  // }, [selectedName, scanAndConnect, onDisconnect])
+  useEffect(() => {
+    if (selectedName) {
+      scanAndConnect()
+    }
+  }, [selectedName, scanAndConnect])
 
   // useEffect(() => {
   //   if (isReset) {
@@ -251,8 +250,7 @@ const useBle = () => {
   const onChangeName = useCallback((name) => {
     setSelectedName(name)
     onDisconnect()
-    scanAndConnect()
-  }, [onDisconnect, scanAndConnect])
+  }, [onDisconnect])
 
   // return { distance, time, logs, isConnected, scanAndConnect, reset, clearLogs, setToggleTimer, isStarting, state }
   return { distance, time, logs, isConnected, scanAndConnect, clearLogs, state, alarmTime, setAlarmTime, onSaveAlarmTime, names, selectedName, setNames, setSelectedName, onChangeName }
