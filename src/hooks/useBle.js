@@ -43,6 +43,7 @@ const useBle = () => {
   const [alarmTime, setAlarmTime] = useState(0)
   const [names, setNames] = useState([])
   const [selectedName, setSelectedName] = useState()
+  const [bleDevice, setBleDevice] = useState(null)
 
   useEffect(() => {
     const savedLogs = localStorage.getItem('logs')
@@ -106,6 +107,7 @@ const useBle = () => {
     })
     .then(device => {
       console.log({ device })
+      setBleDevice(device)
       device.addEventListener('gattserverdisconnected', (event) => {
         const device = event.target;
         setIsConnected(false)
@@ -167,11 +169,25 @@ const useBle = () => {
     .catch(error => { console.error(error); });
   }, [selectedName])
 
+  const onDisconnect = useCallback(() => {
+    if (!bleDevice) {
+      return
+    }
+    if (bleDevice.gatt.connected) {
+      bleDevice.gatt.disconnect()
+    } else {
+      console.log('Already disconnected')
+    }
+    setIsConnected(false)
+    setBleDevice(null)
+  }, [bleDevice])
+
   useEffect(() => {
     if (selectedName) {
+      onDisconnect()
       scanAndConnect()
     }
-  }, [selectedName, scanAndConnect])
+  }, [selectedName, scanAndConnect, onDisconnect])
 
   // useEffect(() => {
   //   if (isReset) {
