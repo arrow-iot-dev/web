@@ -16,7 +16,7 @@ const FlatList = ({ data, keyExtractor, renderItem}) => {
 	)
 }
 
-const Logs = ({ data = [], clearLogs, names, setNames, selectedName, setSelectedName }) => {
+const Logs = ({ data = [], clearLogs, names, setNames, selectedName, setSelectedName, onChangeName }) => {
 	const [value, setValue] = useState('')
 	const [date, setDate] = useState(dayjs().format('YYYY-MM-DD'))
 
@@ -55,7 +55,7 @@ const Logs = ({ data = [], clearLogs, names, setNames, selectedName, setSelected
 			<div style={styles.nameRow}>
 				{names.map((name) =>
 					<div style={name === selectedName ? styles.activeTag : styles.tag}>
-						<span onClick={() => setSelectedName(name)}>{name}</span>
+						<span onClick={() => onChangeName(name)}>{name}</span>
 						<span style={{ cursor: 'pointer'}} onClick={() => {
 							setNames(names => {
 								const newValue = names.filter(n => n !== name)
