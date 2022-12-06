@@ -44,6 +44,7 @@ const useBle = () => {
   const [names, setNames] = useState([])
   const [selectedName, setSelectedName] = useState()
   const [bleDevice, setBleDevice] = useState(null)
+  const [bleCharacteristic, setBleCharacteristic] = useState(null)
 
   useEffect(() => {
     const savedLogs = localStorage.getItem('logs')
@@ -126,6 +127,7 @@ const useBle = () => {
     })
     .then((characteristic) => {
       console.log({ characteristic })
+      setBleCharacteristic(characteristic)
       return characteristic.startNotifications()
     })
     .then(characteristic => {
@@ -209,42 +211,54 @@ const useBle = () => {
   // }, [distance])
 
   const onSaveAlarmTime = () => {
-    navigator.bluetooth.requestDevice({
-      filters: [{
-        name: bleName
-      }],
-      optionalServices: [serviceUUID]
-    })
-    .then(device => {
-      console.log({ device })
-      device.addEventListener('gattserverdisconnected', (event) => {
-        const device = event.target;
-        setIsConnected(false)
-        console.log(`Device ${device.name} is disconnected.`)
-      })
-      return device.gatt.connect();
-    })
-    .then((server) => {
-      console.log({ server })
-      setIsConnected(server.connected)
-      return server.getPrimaryService(serviceUUID)
-    })
-    .then((service) => {
-      console.log({ service })
-      return service.getCharacteristic(characteristicUUID)
-    })
-    .then(characteristic => {
-      if (alarmTime >= 0) {
-        const aTime = alarmTime.toString();
-        const encoder = new TextEncoder('utf-8')
-        // characteristic.writeValue(aTime);
-        characteristic.writeValue(encoder.encode(aTime));
-        alert('Saved !!!')
-      } else {
-        alert('Time is not valid !!!')
-      }
-    })
-    .catch(error => { console.error(error); });
+    if(isConnected) {
+        if (alarmTime >= 0) {
+          const aTime = alarmTime.toString();
+          const encoder = new TextEncoder('utf-8')
+          bleCharacteristic.writeValue(encoder.encode(aTime));
+          alert('Saved !!!')
+        } else {
+          alert('Time is not valid !!!')
+        }
+    } else {
+        alert('Please connect to the device.')
+    }
+    //navigator.bluetooth.requestDevice({
+    //  filters: [{
+    //    name: bleName
+    //  }],
+    //  optionalServices: [serviceUUID]
+    //})
+    //.then(device => {
+    //  console.log({ device })
+    //  device.addEventListener('gattserverdisconnected', (event) => {
+    //    const device = event.target;
+    //    setIsConnected(false)
+    //    console.log(`Device ${device.name} is disconnected.`)
+    //  })
+    //  return device.gatt.connect();
+    //})
+    //.then((server) => {
+    //  console.log({ server })
+    //  setIsConnected(server.connected)
+    //  return server.getPrimaryService(serviceUUID)
+    //})
+    //.then((service) => {
+    //  console.log({ service })
+    //  return service.getCharacteristic(characteristicUUID)
+    //})
+    //.then(characteristic => {
+    //  if (alarmTime >= 0) {
+    //    const aTime = alarmTime.toString();
+    //    const encoder = new TextEncoder('utf-8')
+    //    // characteristic.writeValue(aTime);
+    //    characteristic.writeValue(encoder.encode(aTime));
+    //    alert('Saved !!!')
+    //  } else {
+    //    alert('Time is not valid !!!')
+    //  }
+    //})
+    //.catch(error => { console.error(error); });
   }
 
   const onChangeName = useCallback((name) => {
