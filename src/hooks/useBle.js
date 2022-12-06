@@ -134,7 +134,9 @@ const useBle = () => {
     .then(characteristic => {
       // coupling with addEventListener in onChangeName
 
-      setBleAbortController(new AbortController());
+      const abortController = new AbortController();
+
+      setBleAbortController(abortController);
 
       characteristic.addEventListener('characteristicvaluechanged', (event) => {
         const value = event.target.value
@@ -170,7 +172,7 @@ const useBle = () => {
         //   alert('reset')
         //   reset()
         // }
-      }, {signal: bleAbortController.signal});
+      }, {signal: abortController.signal});
       console.log('Notifications have been started.');
     })
     .catch(error => { console.error(error); });
@@ -275,7 +277,9 @@ const useBle = () => {
     .then(characteristic => {
       // coupling with addEventListener in scanAndConnect
 
-      setBleAbortController(new AbortController());
+      const abortController = new AbortController();
+
+      setBleAbortController(abortController);
 
       characteristic.addEventListener('characteristicvaluechanged', (event) => {
         const value = event.target.value
@@ -307,7 +311,7 @@ const useBle = () => {
             return newLogs
           })
         }
-      }, {signal: bleAbortController.signal});
+      }, {signal: abortController.signal});
     });
     
     //onDisconnect()
