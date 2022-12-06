@@ -307,7 +307,8 @@ const useBle = () => {
     });
     
     //onDisconnect()
-  }, [onDisconnect, selectedName, bleCharacteristic])
+  //}, [onDisconnect])
+  }, [selectedName, bleCharacteristic])
 
   // return { distance, time, logs, isConnected, scanAndConnect, reset, clearLogs, setToggleTimer, isStarting, state }
   return { distance, time, logs, isConnected, scanAndConnect, clearLogs, state, alarmTime, setAlarmTime, onSaveAlarmTime, names, selectedName, setNames, setSelectedName, onChangeName, setLogs }
