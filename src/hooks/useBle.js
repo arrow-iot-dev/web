@@ -46,7 +46,7 @@ const useBle = () => {
   const [alarmTime, setAlarmTime] = useState(0)
   const [names, setNames] = useState([])
   const [selectedName, setSelectedName] = useState()
-  const [bleDevice, setBleDevice] = useState(null)
+  //const [bleDevice, setBleDevice] = useState(null)
   const [bleCharacteristic, setBleCharacteristic] = useState(null)
 
   useEffect(() => {
@@ -111,7 +111,7 @@ const useBle = () => {
     })
     .then(device => {
       console.log({ device })
-      setBleDevice(device)
+      //setBleDevice(device)
       device.addEventListener('gattserverdisconnected', (event) => {
         const device = event.target;
         setIsConnected(false)
