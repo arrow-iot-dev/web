@@ -234,7 +234,7 @@ const useBle = () => {
         }, {signal: abortController.signal});
       });
     }
-  }, [selectedName, bleCharacteristic])
+  }, [selectedName])
 
   // useEffect(() => {
   //   if (isReset) {
