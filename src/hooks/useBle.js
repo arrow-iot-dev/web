@@ -175,18 +175,18 @@ const useBle = () => {
     .catch(error => { console.error(error); });
   }, [selectedName])
 
-  const onDisconnect = useCallback(() => {
-    if (!bleDevice) {
-      return
-    }
-    if (bleDevice.gatt.connected) {
-      bleDevice.gatt.disconnect()
-    } else {
-      console.log('Already disconnected')
-    }
-    setIsConnected(false)
-    setBleDevice(null)
-  }, [bleDevice])
+  //const onDisconnect = useCallback(() => {
+  //  if (!bleDevice) {
+  //    return
+  //  }
+  //  if (bleDevice.gatt.connected) {
+  //    bleDevice.gatt.disconnect()
+  //  } else {
+  //    console.log('Already disconnected')
+  //  }
+  //  setIsConnected(false)
+  //  setBleDevice(null)
+  //}, [bleDevice])
 
   useEffect(() => {
     if (selectedName) {
