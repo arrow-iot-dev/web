@@ -193,48 +193,50 @@ const useBle = () => {
 
   useEffect(() => {
     if (selectedName) {
-      bleCharacteristic.startNotifications()
-      .then(characteristic => {
-        // coupling with addEventListener in scanAndConnect
+      if (bleCharacteristic) {
+        bleCharacteristic.startNotifications()
+        .then(characteristic => {
+          // coupling with addEventListener in scanAndConnect
 
-        const abortController = new AbortController();
+          const abortController = new AbortController();
 
-        setBleAbortController(abortController);
+          setBleAbortController(abortController);
 
-        characteristic.addEventListener('characteristicvaluechanged', (event) => {
-          const value = event.target.value
-          const decoder = new TextDecoder('utf-8')
-          /*
-            state 0 = show distance only
-            state 1 = show distance & time
-            state 2 = show latest distance & time
+          characteristic.addEventListener('characteristicvaluechanged', (event) => {
+            const value = event.target.value
+            const decoder = new TextDecoder('utf-8')
+            /*
+              state 0 = show distance only
+              state 1 = show distance & time
+              state 2 = show latest distance & time
 
-            time => ms
-            distance => inch
-          */
-          const [state, distance, time] = decoder.decode(value).split(',')
-          const distanceInch = +distance
-          const timeN = +time
-          const stateN = +state
-          setDistance(distanceInch)
-          setTime(timeN)
-          setState(stateN)
-          if (stateN === 2) {
-            setLogs((prevLogs) => {
-              const newLogs = [...prevLogs, {
-                distance: distanceInch,
-                time: timeN,
-                dateTime: new Date(),
-                name: selectedName,
-              }]
-              localStorage.setItem('logs', JSON.stringify(newLogs))
-              return newLogs
-            })
-          }
-        }, {signal: abortController.signal});
-      });
+              time => ms
+              distance => inch
+            */
+            const [state, distance, time] = decoder.decode(value).split(',')
+            const distanceInch = +distance
+            const timeN = +time
+            const stateN = +state
+            setDistance(distanceInch)
+            setTime(timeN)
+            setState(stateN)
+            if (stateN === 2) {
+              setLogs((prevLogs) => {
+                const newLogs = [...prevLogs, {
+                  distance: distanceInch,
+                  time: timeN,
+                  dateTime: new Date(),
+                  name: selectedName,
+                }]
+                localStorage.setItem('logs', JSON.stringify(newLogs))
+                return newLogs
+              })
+            }
+          }, {signal: abortController.signal});
+        });
+      }
     }
-  }, [selectedName])
+  }, [selectedName, bleCharacteristic])
 
   // useEffect(() => {
   //   if (isReset) {
