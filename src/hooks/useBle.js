@@ -176,7 +176,8 @@ const useBle = () => {
     //  console.log('Notifications have been started.');
     })
     .catch(error => { console.error(error); });
-  }, [selectedName])
+  //}, [selectedName])
+  }, [])
 
   //const onDisconnect = useCallback(() => {
   //  if (!bleDevice) {
