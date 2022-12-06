@@ -5,9 +5,6 @@ const characteristicUUID = '051f540c-9a37-4284-9f98-2073e9f5bdfe'
 // const characteristicUUID2 = 'ec14304a-1796-4e20-b170-7f24492a5aca'
 const bleName = 'Arrow_ESP32'
 
-const abortController = new AbortController();
-const abortSignal = abortController.signal;
-
 // const maxThreshold =  70 / 2.54 // 70 cm
 // const minThreshold =  50 / 2.54 // 50 cm
 
@@ -48,6 +45,7 @@ const useBle = () => {
   const [selectedName, setSelectedName] = useState()
   //const [bleDevice, setBleDevice] = useState(null)
   const [bleCharacteristic, setBleCharacteristic] = useState(null)
+  const [bleAbortController, setBleAbortController] = useState(null)
 
   useEffect(() => {
     const savedLogs = localStorage.getItem('logs')
@@ -134,8 +132,11 @@ const useBle = () => {
       return characteristic.startNotifications()
     })
     .then(characteristic => {
+      // coupling with addEventListener in onChangeName
+
+      setBleAbortController(new AbortController());
+
       characteristic.addEventListener('characteristicvaluechanged', (event) => {
-        // coupling with addEventListener in onChangeName
         const value = event.target.value
         const decoder = new TextDecoder('utf-8')
         /*
@@ -169,11 +170,11 @@ const useBle = () => {
         //   alert('reset')
         //   reset()
         // }
-      }, {signal: abortSignal});
+      }, {signal: bleAbortController.signal});
       console.log('Notifications have been started.');
     })
     .catch(error => { console.error(error); });
-  }, [selectedName])
+  }, [selectedName, bleAbortController])
 
   //const onDisconnect = useCallback(() => {
   //  if (!bleDevice) {
@@ -268,12 +269,15 @@ const useBle = () => {
   const onChangeName = useCallback((name) => {
     setSelectedName(name)
     
-    abortController.abort()
+    bleAbortController.abort()
 
     bleCharacteristic.startNotifications()
     .then(characteristic => {
+      // coupling with addEventListener in scanAndConnect
+
+      setBleAbortController(new AbortController());
+
       characteristic.addEventListener('characteristicvaluechanged', (event) => {
-        // coupling with addEventListener in scanAndConnect
         const value = event.target.value
         const decoder = new TextDecoder('utf-8')
         /*
@@ -303,12 +307,12 @@ const useBle = () => {
             return newLogs
           })
         }
-      }, {signal: abortSignal});
+      }, {signal: bleAbortController.signal});
     });
     
     //onDisconnect()
   //}, [onDisconnect])
-  }, [selectedName, bleCharacteristic])
+  }, [selectedName, bleCharacteristic, bleAbortController])
 
   // return { distance, time, logs, isConnected, scanAndConnect, reset, clearLogs, setToggleTimer, isStarting, state }
   return { distance, time, logs, isConnected, scanAndConnect, clearLogs, state, alarmTime, setAlarmTime, onSaveAlarmTime, names, selectedName, setNames, setSelectedName, onChangeName, setLogs }
