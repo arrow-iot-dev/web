@@ -46,12 +46,16 @@ const Logs = ({ data = [], clearLogs, names, setNames, selectedName, setSelected
 				<input value={value} onChange={(e) => setValue(e.target.value)} />
 				<button onClick={() => {
                                         if (!(value === '')) {
-                                          setNames(names => {
-                                                  const newValue = [...names, value]
-                                                  localStorage.setItem('names', JSON.stringify(newValue))
-                                                  return newValue
-                                          })
-                                          setValue('')
+                                          if ((names.find(name => name === value)) === undefined) {
+                                            setNames(names => {
+                                                    const newValue = [...names, value]
+                                                    localStorage.setItem('names', JSON.stringify(newValue))
+                                                    return newValue
+                                            })
+                                            setValue('')
+                                          } else {
+                                            alert('User \'' + value '\' already exists')
+                                          }
                                         }
 				}}>+ Add</button>
 			</div>
