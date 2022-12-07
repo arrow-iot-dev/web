@@ -45,7 +45,7 @@ const Logs = ({ data = [], clearLogs, names, setNames, selectedName, setSelected
 			<div style={{ marginBottom: 10}}>
 				<input value={value} onChange={(e) => setValue(e.target.value)} />
 				<button onClick={() => {
-                                        if (!(value === '') {
+                                        if (!(value === '')) {
                                           setNames(names => {
                                                   const newValue = [...names, value]
                                                   localStorage.setItem('names', JSON.stringify(newValue))
