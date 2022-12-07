@@ -113,6 +113,7 @@ const useBle = () => {
       device.addEventListener('gattserverdisconnected', (event) => {
         const device = event.target;
         setIsConnected(false)
+        setBleCharacteristic(null)
         alert('Device disconnected')
         console.log(`Device ${device.name} is disconnected.`)
       })
