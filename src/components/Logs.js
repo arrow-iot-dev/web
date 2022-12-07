@@ -54,7 +54,7 @@ const Logs = ({ data = [], clearLogs, names, setNames, selectedName, setSelected
                                             })
                                             setValue('')
                                           } else {
-                                            alert('User \'' + value '\' already exists')
+                                            alert('User \'' + value + '\' already exists')
                                           }
                                         }
 				}}>+ Add</button>
