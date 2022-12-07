@@ -54,7 +54,7 @@ const Logs = ({ data = [], clearLogs, names, setNames, selectedName, setSelected
                                             })
                                             setValue('')
                                           } else {
-                                            alert('User \'' + value + '\' already exists')
+                                            alert('User \'' + value + '\' already exists.')
                                           }
                                         }
 				}}>+ Add</button>
@@ -64,16 +64,20 @@ const Logs = ({ data = [], clearLogs, names, setNames, selectedName, setSelected
 					<div style={name === selectedName ? styles.activeTag : styles.tag}>
 						<span onClick={() => onChangeName(name)}>{name}</span>
 						<span style={{ cursor: 'pointer'}} onClick={() => {
-                                                        setLogs(prevLogs => {
-                                                                const newLogs = prevLogs.filter(prevLog => prevLog.name !== name)
-								localStorage.setItem('logs', JSON.stringify(newLogs))
-								return newLogs
-                                                        });
-							setNames(names => {
-								const newValue = names.filter(n => n !== name)
-								localStorage.setItem('names', JSON.stringify(newValue))
-								return newValue
-							});
+                                                        if (!(name === 'NoName')) {
+                                                          setLogs(prevLogs => {
+                                                                  const newLogs = prevLogs.filter(prevLog => prevLog.name !== name)
+                                                                  localStorage.setItem('logs', JSON.stringify(newLogs))
+                                                                  return newLogs
+                                                          });
+							  setNames(names => {
+							          const newValue = names.filter(n => n !== name)
+							          localStorage.setItem('names', JSON.stringify(newValue))
+							          return newValue
+							  });
+                                                        } else {
+                                                          alert('User \'' + name + '\' can not be deleted.')
+                                                        }
 						}}>X</span>
 					</div>
 				)}
