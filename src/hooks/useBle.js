@@ -250,6 +250,7 @@ const useBle = () => {
   useEffect(() => {
     if (bleAbortControllerDisconnect) {
       if (!isConnected) {
+        console.log('aborting');
         bleAbortControllerDisconnect.abort();
       }
     }
