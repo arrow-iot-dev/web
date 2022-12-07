@@ -121,14 +121,8 @@ const useBle = () => {
     })
     .then((server) => {
       console.log({ server })
-
-      setTimeout(() => {
-        setIsConnected(server.connected)
-        return server.getPrimaryService(serviceUUID)
-      }, 1000)
-
-      //setIsConnected(server.connected)
-      //return server.getPrimaryService(serviceUUID)
+      setIsConnected(server.connected)
+      return server.getPrimaryService(serviceUUID)
     })
     .then((service) => {
       console.log({ service })
@@ -183,7 +177,7 @@ const useBle = () => {
     //  }, {signal: abortController.signal});
     //  console.log('Notifications have been started.');
     })
-    .catch(error => { console.error(error); });
+    .catch(error => { console.error(error); location.reload(); });
   //}, [selectedName])
   }, [])
 
