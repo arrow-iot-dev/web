@@ -45,7 +45,8 @@ const useBle = () => {
   const [selectedName, setSelectedName] = useState()
   //const [bleDevice, setBleDevice] = useState(null)
   const [bleCharacteristic, setBleCharacteristic] = useState(null)
-  const [bleAbortController, setBleAbortController] = useState(null)
+  const [bleAbortControllerCharacteristic, setBleAbortControllerCharacteristic] = useState(null)
+  const [bleAbortControllerDisconnect, setBleAbortControllerDisconnect] = useState(null)
 
   useEffect(() => {
     const savedLogs = localStorage.getItem('logs')
@@ -108,15 +109,20 @@ const useBle = () => {
       optionalServices: [serviceUUID]
     })
     .then(device => {
+
+      const abortController = new AbortController();
+
+      setBleAbortControllerDisconnect(abortController);
+
       console.log({ device })
       //setBleDevice(device)
       device.addEventListener('gattserverdisconnected', (event) => {
         const device = event.target;
         setIsConnected(false)
         setBleCharacteristic(null)
-        alert('Device disconnected')
+        alert('Device disconnected.')
         console.log(`Device ${device.name} is disconnected.`)
-      })
+      }, {signal: abortController.signal})
       return device.gatt.connect();
     })
     .then((server) => {
@@ -203,7 +209,7 @@ const useBle = () => {
 
           const abortController = new AbortController();
 
-          setBleAbortController(abortController);
+          setBleAbortControllerCharacteristic(abortController);
 
           characteristic.addEventListener('characteristicvaluechanged', (event) => {
             const value = event.target.value
@@ -237,9 +243,11 @@ const useBle = () => {
             }
           }, {signal: abortController.signal});
         });
+      } else if (bleAbortControllerDisconnect) {
+        bleAbortControllerDisconnect.abort();
       }
     }
-  }, [selectedName, bleCharacteristic])
+  }, [selectedName, bleCharacteristic, bleAbortControllerDisconnect])
 
   // useEffect(() => {
   //   if (isReset) {
@@ -263,16 +271,16 @@ const useBle = () => {
 
   const onSaveAlarmTime = () => {
     if(isConnected) {
-        if (alarmTime >= 0) {
-          const aTime = alarmTime.toString();
-          const encoder = new TextEncoder('utf-8')
-          bleCharacteristic.writeValue(encoder.encode(aTime));
-          alert('Saved !!!')
-        } else {
-          alert('Time is not valid !!!')
-        }
+      if (alarmTime >= 0) {
+        const aTime = alarmTime.toString();
+        const encoder = new TextEncoder('utf-8')
+        bleCharacteristic.writeValue(encoder.encode(aTime));
+        alert('Saved !!!')
+      } else {
+        alert('Time is not valid !!!')
+      }
     } else {
-        alert('Please connect to the device.')
+      alert('Please connect to the device.')
     }
     //navigator.bluetooth.requestDevice({
     //  filters: [{
@@ -315,11 +323,11 @@ const useBle = () => {
   const onChangeName = useCallback((name) => {
     setSelectedName(name)
     
-    bleAbortController.abort()
+    bleAbortControllerCharacteristic.abort()
     
     //onDisconnect()
   //}, [onDisconnect])
-  }, [bleAbortController])
+  }, [bleAbortControllerCharacteristic])
 
   // return { distance, time, logs, isConnected, scanAndConnect, reset, clearLogs, setToggleTimer, isStarting, state }
   return { distance, time, logs, isConnected, scanAndConnect, clearLogs, state, alarmTime, setAlarmTime, onSaveAlarmTime, names, selectedName, setNames, setSelectedName, onChangeName, setLogs }
