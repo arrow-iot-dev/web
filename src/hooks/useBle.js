@@ -101,85 +101,89 @@ const useBle = () => {
   // }, [time, maxDistance])
 
   const scanAndConnect = useCallback(() => {
-    navigator.bluetooth.requestDevice({
-      filters: [{
-        name: bleName
-      }],
-      optionalServices: [serviceUUID]
-    })
-    .then(device => {
-      console.log({ device })
-      //setBleDevice(device)
-      device.addEventListener('gattserverdisconnected', (event) => {
-        const device = event.target;
-        setIsConnected(false)
-        setBleCharacteristic(null)
-        alert('Device disconnected.')
-        console.log(`Device ${device.name} is disconnected.`)
-      }, {once: true})
-      return device.gatt.connect();
-    })
-    .then((server) => {
-      console.log({ server })
-      setIsConnected(server.connected)
-      return server.getPrimaryService(serviceUUID)
-    })
-    .then((service) => {
-      console.log({ service })
-      return service.getCharacteristic(characteristicUUID)
-    })
-    .then((characteristic) => {
-      console.log({ characteristic })
-      setBleCharacteristic(characteristic)
-    //  return characteristic.startNotifications()
-    //})
-    //.then(characteristic => {
-    //  // coupling with addEventListener in useEffect of selectedName
+    if (isConnected) {
+      navigator.bluetooth.requestDevice({
+        filters: [{
+          name: bleName
+        }],
+        optionalServices: [serviceUUID]
+      })
+      .then(device => {
+        console.log({ device })
+        //setBleDevice(device)
+        device.addEventListener('gattserverdisconnected', (event) => {
+          const device = event.target;
+          setIsConnected(false)
+          setBleCharacteristic(null)
+          alert('Device disconnected.')
+          console.log(`Device ${device.name} is disconnected.`)
+        }, {once: true})
+        return device.gatt.connect();
+      })
+      .then((server) => {
+        console.log({ server })
+        setIsConnected(server.connected)
+        return server.getPrimaryService(serviceUUID)
+      })
+      .then((service) => {
+        console.log({ service })
+        return service.getCharacteristic(characteristicUUID)
+      })
+      .then((characteristic) => {
+        console.log({ characteristic })
+        setBleCharacteristic(characteristic)
+      //  return characteristic.startNotifications()
+      //})
+      //.then(characteristic => {
+      //  // coupling with addEventListener in useEffect of selectedName
 
-    //  const abortController = new AbortController();
+      //  const abortController = new AbortController();
 
-    //  setBleAbortController(abortController);
+      //  setBleAbortController(abortController);
 
-    //  characteristic.addEventListener('characteristicvaluechanged', (event) => {
-    //    const value = event.target.value
-    //    const decoder = new TextDecoder('utf-8')
-    //    /*
-    //      state 0 = show distance only
-    //      state 1 = show distance & time
-    //      state 2 = show latest distance & time
+      //  characteristic.addEventListener('characteristicvaluechanged', (event) => {
+      //    const value = event.target.value
+      //    const decoder = new TextDecoder('utf-8')
+      //    /*
+      //      state 0 = show distance only
+      //      state 1 = show distance & time
+      //      state 2 = show latest distance & time
 
-    //      time => ms
-    //      distance => inch
-    //    */
-    //    const [state, distance, time] = decoder.decode(value).split(',')
-    //    const distanceInch = +distance
-    //    const timeN = +time
-    //    const stateN = +state
-    //    setDistance(distanceInch)
-    //    setTime(timeN)
-    //    setState(stateN)
-    //    if (stateN === 2) {
-    //      setLogs((prevLogs) => {
-    //        const newLogs = [...prevLogs, {
-    //          distance: distanceInch,
-    //          time: timeN,
-    //          dateTime: new Date(),
-    //          name: selectedName,
-    //        }]
-    //        localStorage.setItem('logs', JSON.stringify(newLogs))
-    //        return newLogs
-    //      })
-    //    }
-    //    // if (isReset === 'true') {
-    //    //   alert('reset')
-    //    //   reset()
-    //    // }
-    //  }, {signal: abortController.signal});
-    //  console.log('Notifications have been started.');
-    })
-    .catch(error => { console.error(error); window.location.reload(); });
-  //}, [selectedName])
-  }, [])
+      //      time => ms
+      //      distance => inch
+      //    */
+      //    const [state, distance, time] = decoder.decode(value).split(',')
+      //    const distanceInch = +distance
+      //    const timeN = +time
+      //    const stateN = +state
+      //    setDistance(distanceInch)
+      //    setTime(timeN)
+      //    setState(stateN)
+      //    if (stateN === 2) {
+      //      setLogs((prevLogs) => {
+      //        const newLogs = [...prevLogs, {
+      //          distance: distanceInch,
+      //          time: timeN,
+      //          dateTime: new Date(),
+      //          name: selectedName,
+      //        }]
+      //        localStorage.setItem('logs', JSON.stringify(newLogs))
+      //        return newLogs
+      //      })
+      //    }
+      //    // if (isReset === 'true') {
+      //    //   alert('reset')
+      //    //   reset()
+      //    // }
+      //  }, {signal: abortController.signal});
+      //  console.log('Notifications have been started.');
+      })
+      .catch(error => { console.error(error); window.location.reload(); });
+    } else {
+      alert('Already connected.');
+    }
+    //}, [selectedName])
+  }, [isConnected])
 
   //const onDisconnect = useCallback(() => {
   //  if (!bleDevice) {
