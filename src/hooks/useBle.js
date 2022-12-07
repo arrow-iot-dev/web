@@ -177,7 +177,7 @@ const useBle = () => {
     //  }, {signal: abortController.signal});
     //  console.log('Notifications have been started.');
     })
-    .catch(error => { console.error(error); location.reload(); });
+    .catch(error => { console.error(error); window.location.reload(); });
   //}, [selectedName])
   }, [])
 
