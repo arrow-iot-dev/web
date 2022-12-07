@@ -64,7 +64,7 @@ const Logs = ({ data = [], clearLogs, names, setNames, selectedName, setSelected
 					<div style={name === selectedName ? styles.activeTag : styles.tag}>
 						<span onClick={() => onChangeName(name)}>{name}</span>
 						<span style={{ cursor: 'pointer'}} onClick={() => {
-                                                        if (!(name === 'NoName')) {
+                                                        if (!(name === 'Default')) {
                                                           const confirmation = window.confirm('Are you sure to delete user \'' + name + '\'?')
 
                                                           if (confirmation) {

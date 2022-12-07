@@ -54,7 +54,7 @@ const useBle = () => {
     // setLogs(mockLogs)
 
     const savedNames = localStorage.getItem('names')
-    const oldNames = savedNames ? JSON.parse(savedNames) : ['NoName']
+    const oldNames = savedNames ? JSON.parse(savedNames) : ['Default']
     setNames(oldNames)
     setSelectedName(oldNames?.[0])
   }, [])
