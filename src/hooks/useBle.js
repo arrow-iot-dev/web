@@ -244,10 +244,12 @@ const useBle = () => {
           }, {signal: abortController.signal});
         });
       } else if (bleAbortControllerDisconnect) {
-        bleAbortControllerDisconnect.abort();
+        if (!isConnected) {
+          bleAbortControllerDisconnect.abort();
+        }
       }
     }
-  }, [selectedName, bleCharacteristic, bleAbortControllerDisconnect])
+  }, [selectedName, bleCharacteristic, bleAbortControllerDisconnect, isConnected])
 
   // useEffect(() => {
   //   if (isReset) {
