@@ -46,7 +46,6 @@ const useBle = () => {
   //const [bleDevice, setBleDevice] = useState(null)
   const [bleCharacteristic, setBleCharacteristic] = useState(null)
   const [bleAbortControllerCharacteristic, setBleAbortControllerCharacteristic] = useState(null)
-  const [bleAbortControllerDisconnect, setBleAbortControllerDisconnect] = useState(null)
 
   useEffect(() => {
     const savedLogs = localStorage.getItem('logs')
@@ -109,11 +108,6 @@ const useBle = () => {
       optionalServices: [serviceUUID]
     })
     .then(device => {
-
-      const abortController = new AbortController();
-
-      setBleAbortControllerDisconnect(abortController);
-
       console.log({ device })
       //setBleDevice(device)
       device.addEventListener('gattserverdisconnected', (event) => {
@@ -122,7 +116,7 @@ const useBle = () => {
         setBleCharacteristic(null)
         alert('Device disconnected.')
         console.log(`Device ${device.name} is disconnected.`)
-      }, {signal: abortController.signal})
+      }, {once: true})
       return device.gatt.connect();
     })
     .then((server) => {
@@ -246,15 +240,6 @@ const useBle = () => {
       }
     }
   }, [selectedName, bleCharacteristic])
-
-  useEffect(() => {
-    if (bleAbortControllerDisconnect) {
-      if (!isConnected) {
-        console.log('aborting');
-        bleAbortControllerDisconnect.abort();
-      }
-    }
-  }, [bleAbortControllerDisconnect, isConnected])
 
   // useEffect(() => {
   //   if (isReset) {
