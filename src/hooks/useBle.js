@@ -121,7 +121,12 @@ const useBle = () => {
     })
     .then((server) => {
       console.log({ server })
-      setIsConnected(server.connected)
+
+      setTimeout(() => {
+        setIsConnected(server.connected)
+      }, 1000)
+
+      //setIsConnected(server.connected)
       return server.getPrimaryService(serviceUUID)
     })
     .then((service) => {
