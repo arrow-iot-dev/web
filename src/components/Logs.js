@@ -45,12 +45,14 @@ const Logs = ({ data = [], clearLogs, names, setNames, selectedName, setSelected
 			<div style={{ marginBottom: 10}}>
 				<input value={value} onChange={(e) => setValue(e.target.value)} />
 				<button onClick={() => {
-					setNames(names => {
-						const newValue = [...names, value]
-						localStorage.setItem('names', JSON.stringify(newValue))
-						return newValue
-					})
-					setValue('')
+                                        if (!(value === '') {
+                                          setNames(names => {
+                                                  const newValue = [...names, value]
+                                                  localStorage.setItem('names', JSON.stringify(newValue))
+                                                  return newValue
+                                          })
+                                          setValue('')
+                                        }
 				}}>+ Add</button>
 			</div>
 			<div style={styles.nameRow}>
