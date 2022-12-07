@@ -65,7 +65,7 @@ const Logs = ({ data = [], clearLogs, names, setNames, selectedName, setSelected
 						<span onClick={() => onChangeName(name)}>{name}</span>
 						<span style={{ cursor: 'pointer'}} onClick={() => {
                                                         if (!(name === 'Default')) {
-                                                          const confirmation = window.confirm('Are you sure to delete user \'' + name + '\'?')
+                                                          const confirmation = window.confirm('Are you sure to delete user \'' + name + '\' ?')
 
                                                           if (confirmation) {
                                                             setLogs(prevLogs => {
@@ -78,6 +78,10 @@ const Logs = ({ data = [], clearLogs, names, setNames, selectedName, setSelected
                                                                     localStorage.setItem('names', JSON.stringify(newValue))
                                                                     return newValue
                                                             });
+
+                                                            if (name === selectedName) {
+                                                              onChangeName('Default')
+                                                            }
                                                           }
                                                         } else {
                                                           alert('User \'' + name + '\' can not be deleted.')
