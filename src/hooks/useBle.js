@@ -319,7 +319,9 @@ const useBle = () => {
   const onChangeName = useCallback((name) => {
     setSelectedName(name)
     
-    bleAbortControllerCharacteristic.abort()
+    if (bleAbortControllerCharacteristic) {
+      bleAbortControllerCharacteristic.abort()
+    }
     
     //onDisconnect()
   //}, [onDisconnect])
