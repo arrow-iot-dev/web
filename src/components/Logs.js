@@ -23,7 +23,7 @@ const Logs = ({ data = [], clearLogs, names, setNames, selectedName, setSelected
 	const list = data.filter((item) => item.name === selectedName && dayjs(item.dateTime).isSame(date, 'date'))
 
 	const onClear = () => {
-		const answer = window.confirm('Are you sure to clear all logs')
+		const answer = window.confirm('Are you sure to clear all logs?')
 		if (answer) {
 			clearLogs()
 		}
@@ -65,16 +65,20 @@ const Logs = ({ data = [], clearLogs, names, setNames, selectedName, setSelected
 						<span onClick={() => onChangeName(name)}>{name}</span>
 						<span style={{ cursor: 'pointer'}} onClick={() => {
                                                         if (!(name === 'NoName')) {
-                                                          setLogs(prevLogs => {
-                                                                  const newLogs = prevLogs.filter(prevLog => prevLog.name !== name)
-                                                                  localStorage.setItem('logs', JSON.stringify(newLogs))
-                                                                  return newLogs
-                                                          });
-							  setNames(names => {
-							          const newValue = names.filter(n => n !== name)
-							          localStorage.setItem('names', JSON.stringify(newValue))
-							          return newValue
-							  });
+                                                          const confirmation = window.confirm('Are you sure to delete user \'' + name + '\'?')
+
+                                                          if (confirmation) {
+                                                            setLogs(prevLogs => {
+                                                                    const newLogs = prevLogs.filter(prevLog => prevLog.name !== name)
+                                                                    localStorage.setItem('logs', JSON.stringify(newLogs))
+                                                                    return newLogs
+                                                            });
+                                                            setNames(names => {
+                                                                    const newValue = names.filter(n => n !== name)
+                                                                    localStorage.setItem('names', JSON.stringify(newValue))
+                                                                    return newValue
+                                                            });
+                                                          }
                                                         } else {
                                                           alert('User \'' + name + '\' can not be deleted.')
                                                         }
