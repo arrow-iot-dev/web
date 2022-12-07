@@ -243,13 +243,17 @@ const useBle = () => {
             }
           }, {signal: abortController.signal});
         });
-      } else if (bleAbortControllerDisconnect) {
-        if (!isConnected) {
-          bleAbortControllerDisconnect.abort();
-        }
       }
     }
-  }, [selectedName, bleCharacteristic, bleAbortControllerDisconnect, isConnected])
+  }, [selectedName, bleCharacteristic])
+
+  useEffect(() => {
+    if (bleAbortControllerDisconnect) {
+      if (!isConnected) {
+        bleAbortControllerDisconnect.abort();
+      }
+    }
+  }, [bleAbortControllerDisconnect, isConnected])
 
   // useEffect(() => {
   //   if (isReset) {
