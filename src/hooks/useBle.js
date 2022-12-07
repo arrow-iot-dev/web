@@ -101,7 +101,7 @@ const useBle = () => {
   // }, [time, maxDistance])
 
   const scanAndConnect = useCallback(() => {
-    if (isConnected) {
+    if (!isConnected) {
       navigator.bluetooth.requestDevice({
         filters: [{
           name: bleName
