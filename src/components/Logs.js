@@ -175,6 +175,6 @@ const styles = {
 	nameRow: {
 		display: 'flex',
 		gap: 5,
-                flex-wrap: 'wrap',
+                flexWrap: 'wrap',
 	}
 }
