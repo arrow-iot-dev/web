@@ -42,10 +42,16 @@ const useBle = () => {
   const [state, setState] = useState(0)
   const [alarmTime, setAlarmTime] = useState(0)
   const [names, setNames] = useState([])
-  const [selectedName, setSelectedName] = useState()
+  const [selectedName, _setSelectedName] = useState()
   //const [bleDevice, setBleDevice] = useState(null)
   const [bleCharacteristic, setBleCharacteristic] = useState(null)
-  const [bleAbortControllerCharacteristic, setBleAbortControllerCharacteristic] = useState(null)
+  //const [bleAbortControllerCharacteristic, setBleAbortControllerCharacteristic] = useState(null)
+
+  const selectedNameRef = useRef(selectedName)
+  const setSelectedName = ((data) => {
+    selectedNameRef.current = data
+    _setSelectedName(data)
+  }
 
   useEffect(() => {
     const savedLogs = localStorage.getItem('logs')
@@ -132,51 +138,53 @@ const useBle = () => {
       .then((characteristic) => {
         console.log({ characteristic })
         setBleCharacteristic(characteristic)
-      //  return characteristic.startNotifications()
-      //})
-      //.then(characteristic => {
-      //  // coupling with addEventListener in useEffect of selectedName
+        return characteristic.startNotifications()
+      })
+      .then(characteristic => {
+        // coupling with addEventListener in useEffect of selectedName
 
-      //  const abortController = new AbortController();
+        //const abortController = new AbortController();
 
-      //  setBleAbortController(abortController);
+        //setBleAbortController(abortController);
 
-      //  characteristic.addEventListener('characteristicvaluechanged', (event) => {
-      //    const value = event.target.value
-      //    const decoder = new TextDecoder('utf-8')
-      //    /*
-      //      state 0 = show distance only
-      //      state 1 = show distance & time
-      //      state 2 = show latest distance & time
+        characteristic.addEventListener('characteristicvaluechanged', (event) => {
+          const value = event.target.value
+          const decoder = new TextDecoder('utf-8')
+          /*
+            state 0 = show distance only
+            state 1 = show distance & time
+            state 2 = show latest distance & time
 
-      //      time => ms
-      //      distance => inch
-      //    */
-      //    const [state, distance, time] = decoder.decode(value).split(',')
-      //    const distanceInch = +distance
-      //    const timeN = +time
-      //    const stateN = +state
-      //    setDistance(distanceInch)
-      //    setTime(timeN)
-      //    setState(stateN)
-      //    if (stateN === 2) {
-      //      setLogs((prevLogs) => {
-      //        const newLogs = [...prevLogs, {
-      //          distance: distanceInch,
-      //          time: timeN,
-      //          dateTime: new Date(),
-      //          name: selectedName,
-      //        }]
-      //        localStorage.setItem('logs', JSON.stringify(newLogs))
-      //        return newLogs
-      //      })
-      //    }
-      //    // if (isReset === 'true') {
-      //    //   alert('reset')
-      //    //   reset()
-      //    // }
-      //  }, {signal: abortController.signal});
-      //  console.log('Notifications have been started.');
+            time => ms
+            distance => inch
+          */
+          const [state, distance, time] = decoder.decode(value).split(',')
+          const distanceInch = +distance
+          const timeN = +time
+          const stateN = +state
+          setDistance(distanceInch)
+          setTime(timeN)
+          setState(stateN)
+          if (stateN === 2) {
+            setLogs((prevLogs) => {
+              const newLogs = [...prevLogs, {
+                distance: distanceInch,
+                time: timeN,
+                dateTime: new Date(),
+                //name: selectedName,
+                name: selectedNameRef.current,
+              }]
+              localStorage.setItem('logs', JSON.stringify(newLogs))
+              return newLogs
+            })
+          }
+          // if (isReset === 'true') {
+          //   alert('reset')
+          //   reset()
+          // }
+        //}, {signal: abortController.signal});
+        });
+        console.log('Notifications have been started.');
       })
       .catch(error => { console.error(error); window.location.reload(); });
     } else {
@@ -198,52 +206,52 @@ const useBle = () => {
   //  setBleDevice(null)
   //}, [bleDevice])
 
-  useEffect(() => {
-    if (selectedName) {
-      if (bleCharacteristic) {
-        bleCharacteristic.startNotifications()
-        .then(characteristic => {
-          // coupling with addEventListener in scanAndConnect
+  //useEffect(() => {
+  //  if (selectedName) {
+  //    if (bleCharacteristic) {
+  //      bleCharacteristic.startNotifications()
+  //      .then(characteristic => {
+  //        // coupling with addEventListener in scanAndConnect
 
-          const abortController = new AbortController();
+  //        const abortController = new AbortController();
 
-          setBleAbortControllerCharacteristic(abortController);
+  //        setBleAbortControllerCharacteristic(abortController);
 
-          characteristic.addEventListener('characteristicvaluechanged', (event) => {
-            const value = event.target.value
-            const decoder = new TextDecoder('utf-8')
-            /*
-              state 0 = show distance only
-              state 1 = show distance & time
-              state 2 = show latest distance & time
+  //        characteristic.addEventListener('characteristicvaluechanged', (event) => {
+  //          const value = event.target.value
+  //          const decoder = new TextDecoder('utf-8')
+  //          /*
+  //            state 0 = show distance only
+  //            state 1 = show distance & time
+  //            state 2 = show latest distance & time
 
-              time => ms
-              distance => inch
-            */
-            const [state, distance, time] = decoder.decode(value).split(',')
-            const distanceInch = +distance
-            const timeN = +time
-            const stateN = +state
-            setDistance(distanceInch)
-            setTime(timeN)
-            setState(stateN)
-            if (stateN === 2) {
-              setLogs((prevLogs) => {
-                const newLogs = [...prevLogs, {
-                  distance: distanceInch,
-                  time: timeN,
-                  dateTime: new Date(),
-                  name: selectedName,
-                }]
-                localStorage.setItem('logs', JSON.stringify(newLogs))
-                return newLogs
-              })
-            }
-          }, {signal: abortController.signal});
-        });
-      }
-    }
-  }, [selectedName, bleCharacteristic])
+  //            time => ms
+  //            distance => inch
+  //          */
+  //          const [state, distance, time] = decoder.decode(value).split(',')
+  //          const distanceInch = +distance
+  //          const timeN = +time
+  //          const stateN = +state
+  //          setDistance(distanceInch)
+  //          setTime(timeN)
+  //          setState(stateN)
+  //          if (stateN === 2) {
+  //            setLogs((prevLogs) => {
+  //              const newLogs = [...prevLogs, {
+  //                distance: distanceInch,
+  //                time: timeN,
+  //                dateTime: new Date(),
+  //                name: selectedName,
+  //              }]
+  //              localStorage.setItem('logs', JSON.stringify(newLogs))
+  //              return newLogs
+  //            })
+  //          }
+  //        }, {signal: abortController.signal});
+  //      });
+  //    }
+  //  }
+  //}, [selectedName, bleCharacteristic])
 
   // useEffect(() => {
   //   if (isReset) {
@@ -319,13 +327,14 @@ const useBle = () => {
   const onChangeName = useCallback((name) => {
     setSelectedName(name)
     
-    if (bleAbortControllerCharacteristic) {
-      bleAbortControllerCharacteristic.abort()
-    }
+    //if (bleAbortControllerCharacteristic) {
+    //  bleAbortControllerCharacteristic.abort()
+    //}
     
     //onDisconnect()
   //}, [onDisconnect])
-  }, [bleAbortControllerCharacteristic])
+  //}, [bleAbortControllerCharacteristic])
+  }, [])
 
   // return { distance, time, logs, isConnected, scanAndConnect, reset, clearLogs, setToggleTimer, isStarting, state }
   return { distance, time, logs, isConnected, scanAndConnect, clearLogs, state, alarmTime, setAlarmTime, onSaveAlarmTime, names, selectedName, setNames, setSelectedName, onChangeName, setLogs }
