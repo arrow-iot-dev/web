@@ -51,7 +51,7 @@ const useBle = () => {
   const setSelectedName = ((data) => {
     selectedNameRef.current = data
     _setSelectedName(data)
-  }
+  })
 
   useEffect(() => {
     const savedLogs = localStorage.getItem('logs')
