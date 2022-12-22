@@ -126,7 +126,6 @@ const Logs = ({ data = [], clearLogs, names, setNames, selectedName, setSelected
                                                             localStorage.setItem('logs', JSON.stringify(newLogs))
                                                             return newLogs
                                                           });
-                                                          console.log(data);
                                                         }}/>
 						</div>
 					)
