@@ -16,17 +16,23 @@ const bleName = 'Arrow_ESP32'
 //   distance: 100.0,
 //   time: 4000,
 //   dateTime: new Date(),
-//   name: 'Ping'
+//   name: 'Ping',
+//   point: '0',
+//   uuid: ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)),
 // }, {
 //   distance: 100.0,
 //   time: 4000,
 //   dateTime: new Date(),
 //   name: 'Joe',
+//   point: '10',
+//   uuid: ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)),
 // }, {
 //   distance: 120.0,
 //   time: 4100,
 //   dateTime: new Date(),
 //   name: 'Jame',
+//   point: 'x',
+//   uuid: ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)),
 // }]
 
 const useBle = () => {
@@ -173,6 +179,8 @@ const useBle = () => {
                 dateTime: new Date(),
                 //name: selectedName,
                 name: selectedNameRef.current,
+                point: '0',
+                uuid: ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)),
               }]
               localStorage.setItem('logs', JSON.stringify(newLogs))
               return newLogs

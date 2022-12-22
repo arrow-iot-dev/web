@@ -99,6 +99,7 @@ const Logs = ({ data = [], clearLogs, names, setNames, selectedName, setSelected
 				<div style={{...styles.th, ...styles.number}}>No.</div>
 				<div style={{...styles.th, ...styles.distance}}>Distance (in.)</div>
 				<div style={{...styles.th, ...styles.time}}>Time (sec.)</div>
+				<div style={{...styles.th, ...styles.point}}>Point</div>
 			</div>
 			<FlatList
 				data={list}
@@ -114,6 +115,19 @@ const Logs = ({ data = [], clearLogs, names, setNames, selectedName, setSelected
 							<div style={styles.number}>#{index + 1}</div>
 							<div style={styles.distance}>{(item.distance || 0).toFixed(2)}</div>
 							<div style={styles.time}>{timer}</div>
+                                                        <input style={styles.point} value={item.point} onChange={(e) => {
+                                                          setLogs(prevLogs => {
+                                                            const newLogs = prevLogs.map(prevLog => {
+                                                              if (prevLog.uuid === item.uuid) {
+                                                                prevLog.point = e.target.value;
+                                                              }
+                                                              return prevLog
+                                                            })
+                                                            localStorage.setItem('logs', JSON.stringify(newLogs))
+                                                            return newLogs
+                                                          });
+                                                          console.log(data);
+                                                        }}/>
 						</div>
 					)
 				}}
@@ -155,6 +169,13 @@ const styles = {
 		flex: 3,
 		divAlign: 'right',
 		fontSize: 20,
+	},
+	point: {
+	        flex: 1,
+                divAlign: 'right',
+	        fontSize: 20,
+                textAlign: 'center',
+                width: 1,
 	},
 	tag: {
 		border: '1px solid #d0d0d0',
