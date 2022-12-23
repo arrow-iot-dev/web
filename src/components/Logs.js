@@ -30,11 +30,16 @@ const Logs = ({ data = [], clearLogs, names, setNames, selectedName, setSelected
 	}
 	const onExport = () => {
 		const filteredList = data.filter((item) => dayjs(item.dateTime).isSame(date, 'date'))
-		const columns = 'No.,Distance(in.),Time(sec.),Name,Date Time'
-		const text = [columns, ...filteredList.map((log, index) => `${index + 1},${(log.distance || 0).toFixed(2)},${log.time / 1000},${log.name},${log.dateTime.toLocaleDateString('en-GB')} ${log.dateTime.toLocaleTimeString('en-GB')}`)].join('\n')
+		const columns = 'No.,Date Time,Name,Distance(in.),Time(sec.),Point'
+		const text = [columns, ...filteredList.map((log, index) => `${index + 1},${log.dateTime.toLocaleDateString('en-GB')} ${log.dateTime.toLocaleTimeString('en-GB')},${log.name},${(log.distance || 0).toFixed(2)},${log.time / 1000},${log.point}`)].join('\n')
 		const content = `data:text/csv;charset=utf-8,${text}`
 		const encodedUri = encodeURI(content)
-		window.open(encodedUri)
+		//window.open(encodedUri)
+
+                const link = document.createElement('a')
+                link.download = 'archery_export'
+                link.href = encodedUri
+                link.click();
 	}
 
 	return (
