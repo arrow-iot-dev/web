@@ -8,7 +8,7 @@ const Setting = ({ alarmTime, setAlarmTime, onSaveAlarmTime }) => {
 	return (
 		<div style={styles.container}>
 			<div style={styles.distanceWrap}>
-        <div style={styles.label}>Set Alarm Time (sec)</div>
+        <div style={styles.label}>Set Alarm Time (sec.)</div>
         <input type="number" style={styles.input} value={time} onChange={(e) => {
           const newTime = +e.target.value * 1000
           setAlarmTime(newTime)

@@ -91,7 +91,7 @@ const Logs = ({ data = [], clearLogs, names, setNames, selectedName, setSelected
                                                         } else {
                                                           alert('User \'' + name + '\' can not be deleted.')
                                                         }
-						}}>X</span>
+						}}>☒</span>
 					</div>
 				)}
 			</div>
@@ -105,6 +105,7 @@ const Logs = ({ data = [], clearLogs, names, setNames, selectedName, setSelected
 				<div style={{...styles.th, ...styles.distance}}>Distance (in.)</div>
 				<div style={{...styles.th, ...styles.time}}>Time (sec.)</div>
 				<div style={{...styles.th, ...styles.point}}>Point</div>
+				<div style={{...styles.th, ...styles.del}}></div>
 			</div>
 			<FlatList
 				data={list}
@@ -132,6 +133,16 @@ const Logs = ({ data = [], clearLogs, names, setNames, selectedName, setSelected
                                                             return newLogs
                                                           });
                                                         }}/>
+				                        <div style={styles.del} onClick={(e) => {
+                                                          const confirmation = window.confirm('Are you sure to delete record #' + (index + 1) + ' ?')
+                                                          if (confirmation) {
+                                                            setLogs(prevLogs => {
+                                                              const newLogs = prevLogs.filter(prevLog => prevLog.uuid !== item.uuid)
+                                                              localStorage.setItem('logs', JSON.stringify(newLogs))
+                                                              return newLogs
+                                                            });
+                                                          }
+                                                        }}>☒</div>
 						</div>
 					)
 				}}
@@ -180,6 +191,12 @@ const styles = {
 	        fontSize: 20,
                 textAlign: 'center',
                 width: 1,
+	},
+	del: {
+	        flex: 1,
+                divAlign: 'right',
+	        fontSize: 20,
+                textAlign: 'center',
 	},
 	tag: {
 		border: '1px solid #d0d0d0',
