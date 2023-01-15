@@ -286,8 +286,9 @@ const useBle = () => {
     if(isConnected) {
       if ((alarmTimeMax >= 0) && (alarmTimeMin >= 0)) {
         const aTime = alarmTimeMax.toString();
+        const bTime = alarmTimeMin.toString();
         const encoder = new TextEncoder('utf-8')
-        bleCharacteristic.writeValue(encoder.encode(aTime));
+        bleCharacteristic.writeValue(encoder.encode(aTime + ',' + bTime));
         alert('Saved !!!')
       } else {
         alert('Time is not valid !!!')
